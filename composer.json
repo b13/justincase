@@ -1,0 +1,22 @@
+{
+	"name": "b13/justincase",
+	"type": "typo3-cms-extension",
+	"description": "With incoming URLs, it does not matter if they are upper/lowercase, they just work.",
+	"license": "GPL-2.0-or-later",
+	"require": {
+		"typo3/cms-core": "^9.5 || ^10.0"
+	},
+	"replace": {
+		"justincase": "self.version"
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "justincase"
+		}
+	},
+	"autoload": {
+		"psr-4": {
+			"B13\\JustInCase\\": "src/"
+		}
+	}
+}
