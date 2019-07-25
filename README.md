@@ -18,17 +18,16 @@ Use it via `composer req b13/justincase` or install the Extension `justincase` f
 
 _justincase_ requires TYPO3 v9.5.0 or later.
 
+## Configuration
 
-## ToDo
+As a web developer, sometimes the team wants a 307 redirect, and sometimes to just work as everything would be lower-case.
 
-It would be REALLY cool, if an option could define whether you want this option handling 404/200 or as a redirect.
-
-Currently, you can add
+_justincase_ does the latter ("just pretend it works") and receives the URL, processes the URL further by default, however
+you can configure the extension on a per-site basis to do redirects instead, by modifying the site configuration yaml
+file and adding these lines at the bottom:
 
     settings:
         redirectOnUpperCase: true
-
-to your site configuration to enable redirects.
 
 
 ## License
@@ -46,4 +45,4 @@ exactly that, without having to burden everything into TYPO3 Core.
 _justincase_ was initially created by Daniel Goerz and Benni Mack for [b13, Stuttgart](https://b13.com), with the nice
 support from Matthias Stegmann for providing the extension name.
 
-Icons provided via https://www.iconspng.com/image/26353/primary-casesensitive
+Extension icon provided via https://www.iconspng.com/image/26353/primary-casesensitive
