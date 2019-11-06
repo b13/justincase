@@ -29,6 +29,12 @@ file and adding these lines at the bottom:
     settings:
         redirectOnUpperCase: true
 
+Please note that this option only works for GET or HEAD requests.
+
+## Caveats
+
+If specific route enhancers check on camel-case (e.g. `{order}/paymentForm/`) this might lead to unexpected behaviours
+and 404 pages.
 
 ## License
 
