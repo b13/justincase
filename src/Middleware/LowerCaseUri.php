@@ -45,7 +45,8 @@ class LowerCaseUri implements MiddlewareInterface
         }
 
 
-        if ($doRedirect) {
+        // Redirects only work on GET and HEAD requests
+        if ($doRedirect && in_array($request->getMethod(), ['GET', 'HEAD'])) {
             return new RedirectResponse($updatedUri, 307);
         }
 
