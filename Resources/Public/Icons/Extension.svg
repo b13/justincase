@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 256 256" style="enable-background:new 0 0 256 256;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#284E44;}
+	.st1{fill:#FFFFFF;}
+	.st2{opacity:0.2;fill:#FFFFFF;}
+</style>
+<g>
+	<rect class="st0" width="256" height="256"/>
+	<title>EXT:justincase</title>
+	<g>
+		<path class="st1" d="M78.1,73.9h27l34,106.6h-23.1l-6-20.9H72.5l-6.1,20.9H43.3L78.1,73.9z M78.1,142.6h26.3L91.6,96.9L78.1,142.6
+			z"/>
+		<path class="st1" d="M190.4,180.5V175c-4.7,3.9-11.3,7.1-19.9,7.1c-16,0-24.5-9.6-24.5-24.5c0-18.8,15.2-28.4,36.2-28.4
+			c2.8,0,5.5,0.3,8.2,0.6v-0.9c0-9.6-5.5-12.4-13.8-12.4c-6.6,0-14.4,2-20.1,4.5l-4.1-18.3c8.6-3.4,18.7-5.6,28.1-5.6
+			c20.7,0,32.2,11.9,32.2,32.5v51H190.4z M178,164.4c6,0,10.2-2.3,12.4-5v-14.1c-1.9-0.3-4.4-0.6-6.6-0.6c-8.6,0-15.1,3.8-15.1,10.7
+			C168.8,161.4,172.9,164.4,178,164.4z"/>
+	</g>
+	<path class="st2" d="M32,224h192v-21.3H32V224z M32,85.3v85.3L74.7,128L32,85.3z M117.3,181.3H224V160H117.3V181.3z M32,32v21.3
+		h192V32H32z M117.3,96H224V74.7H117.3V96z M117.3,138.7H224v-21.3H117.3V138.7z"/>
+</g>
+</svg>
