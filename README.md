@@ -51,4 +51,4 @@ exactly that, without having to burden everything into TYPO3 Core.
 _justincase_ was initially created by Daniel Goerz and Benni Mack for [b13, Stuttgart](https://b13.com), with the nice
 support from Matthias Stegmann for providing the extension name.
 
-Extension icon provided via https://www.iconspng.com/image/26353/primary-casesensitive
+[Find more TYPO3 extensions we have developed](https://b13.com/useful-typo3-extensions-from-b13-to-you) that help us deliver value in client projects. As part of the way we work, we focus on testing and best practices to ensure long-term performance, reliability, and results in all our code.
