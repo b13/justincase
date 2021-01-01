@@ -4,6 +4,7 @@
 	"description": "With incoming URLs, it does not matter if they are upper/lowercase, they just work.",
 	"license": "GPL-2.0-or-later",
 	"require": {
+		"php": "^7.2 || ^8.0",
 		"typo3/cms-core": "^9.5 || ^10.0"
 	},
 	"replace": {
