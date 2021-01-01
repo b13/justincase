@@ -1,4 +1,5 @@
 <?php
+
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Just In Case - Case-insensitive URLs',
     'description' => 'With incoming URLs, it does not matter if they are upper/lowercase, they just work.',

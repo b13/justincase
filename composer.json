@@ -18,5 +18,14 @@
 		"psr-4": {
 			"B13\\JustInCase\\": "src/"
 		}
+	},
+	"require-dev": {
+		"typo3/coding-standards": "^0.2.0"
+	},
+	"config": {
+		"sort-packages": true
+	},
+	"scripts": {
+		"php:cs": "@composer exec php-cs-fixer fix"
 	}
 }

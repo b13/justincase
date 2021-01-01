@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace B13\JustInCase\Middleware;
 
 /*
@@ -43,7 +44,6 @@ class LowerCaseUri implements MiddlewareInterface
         if ($site instanceof Site) {
             $doRedirect = (bool)$site->getConfiguration()['settings']['redirectOnUpperCase'] ?? false;
         }
-
 
         // Redirects only work on GET and HEAD requests
         if ($doRedirect && in_array($request->getMethod(), ['GET', 'HEAD'])) {
