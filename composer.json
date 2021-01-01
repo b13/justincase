@@ -7,7 +7,7 @@
 		"typo3/cms-core": "^9.5 || ^10.0"
 	},
 	"replace": {
-		"justincase": "self.version"
+		"typo3-ter/justincase": "self.version"
 	},
 	"extra": {
 		"typo3/cms": {
