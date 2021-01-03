@@ -10,7 +10,7 @@ By default, TYPO3 v9 is strict when you're actual page is called `https://b13.co
 dudes name it `https://b13.com/Lets-Connect/`. TYPO3 v9 saves URLs as lower-case by default.
 
 A simple PSR-15 based middleware transforms your incoming URL into lower-case and you should be fine, as
-both URLs would work then.
+both URLs would work for the users.
 
 ## Installation
 
