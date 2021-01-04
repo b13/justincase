@@ -24,7 +24,7 @@ use TYPO3\CMS\Core\Site\Entity\Site;
  *
  * Example:
  * Request to https://b13.com/Lets-connect/
- * will be redirected to  https://b13.com/lets-connect/
+ * will be redirected to https://b13.com/lets-connect/
  */
 class LowerCaseUri implements MiddlewareInterface
 {
