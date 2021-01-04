@@ -32,7 +32,7 @@ class LowerCaseUri implements MiddlewareInterface
     {
         $originalUri = $request->getUri();
         $path = $originalUri->getPath();
-        $lowerCasePath = strtolower($path);
+        $lowerCasePath = mb_strtolower($path);
         // nothing has changed, nothing to do
         if ($lowerCasePath === $path) {
             return $handler->handle($request);
