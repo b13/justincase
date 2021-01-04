@@ -40,14 +40,16 @@ class LowerCaseUri implements MiddlewareInterface
         $updatedUri = $request->getUri()->withPath($lowerCasePath);
 
         $doRedirect = false;
+        $redirectStatusCode = 307;
         $site = $request->getAttribute('site');
         if ($site instanceof Site) {
             $doRedirect = (bool)$site->getConfiguration()['settings']['redirectOnUpperCase'] ?? false;
+            $redirectStatusCode = (int)($site->getConfiguration()['settings']['redirectStatusCode'] ?? 307);
         }
 
         // Redirects only work on GET and HEAD requests
         if ($doRedirect && in_array($request->getMethod(), ['GET', 'HEAD'])) {
-            return new RedirectResponse($updatedUri, 307);
+            return new RedirectResponse($updatedUri, $redirectStatusCode);
         }
 
         // Update the path to just work as before, and continue with the process

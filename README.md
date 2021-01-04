@@ -28,6 +28,8 @@ file and adding these lines at the bottom:
 
     settings:
         redirectOnUpperCase: true
+        # in case you want to use a status code, other than 307
+        redirectStatusCode: 303
 
 Please note that this option only works for GET or HEAD requests.
 
