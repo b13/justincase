@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace B13\JustInCase\Middleware;
 
 /*
@@ -52,7 +53,7 @@ class LowerCaseUri implements MiddlewareInterface
             $redirectStatusCode = 307;
             $site = $request->getAttribute('site');
             if ($site instanceof Site) {
-                $doRedirect = (bool)$site->getConfiguration()['settings']['redirectOnUpperCase'] ?? false;
+                $doRedirect = (bool)$site->getConfiguration()['settings']['redirectOnUpperCase'];
                 $redirectStatusCode = (int)($site->getConfiguration()['settings']['redirectStatusCode'] ?? 307);
             }
 
@@ -65,7 +66,10 @@ class LowerCaseUri implements MiddlewareInterface
             $request = $request->withUri($updatedUri);
             $routeResult = $request->getAttribute('routing');
             if ($routeResult instanceof SiteRouteResult) {
-                $routeResult = new SiteRouteResult($updatedUri, $routeResult->getSite(), $routeResult->getLanguage(), strtolower($routeResult->getTail()));
+                $routeResult = new SiteRouteResult(
+                    $updatedUri, $routeResult->getSite(), $routeResult->getLanguage(),
+                    strtolower($routeResult->getTail())
+                );
                 $request = $request->withAttribute('routing', $routeResult);
             }
         }
