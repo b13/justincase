@@ -68,7 +68,7 @@ class LowerCaseUri implements MiddlewareInterface
             if ($routeResult instanceof SiteRouteResult) {
                 $routeResult = new SiteRouteResult(
                     $updatedUri, $routeResult->getSite(), $routeResult->getLanguage(),
-                    strtolower($routeResult->getTail())
+                    mb_strtolower($routeResult->getTail())
                 );
                 $request = $request->withAttribute('routing', $routeResult);
             }
