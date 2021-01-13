@@ -32,46 +32,52 @@ class LowerCaseUri implements MiddlewareInterface
 {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        try {
-            $previousResult = $request->getAttribute('routing', null);
-            /** @var Site $site */
-            $site = $request->getAttribute('site', null);
-            $site->getRouter()->matchRequest($request, $previousResult);
-        } catch (RouteNotFoundException $e) {
-            $originalUri = $request->getUri();
-            $path = $originalUri->getPath();
-            $lowerCasePath = mb_strtolower($path);
+        /** @var Site $site */
+        $site = $request->getAttribute('site');
 
-            // nothing has changed, nothing to do
-            if ($lowerCasePath === $path) {
+        if ($site instanceof Site) {
+            try {
+                $previousResult = $request->getAttribute('routing');
+
+                $site->getRouter()->matchRequest($request, $previousResult);
                 return $handler->handle($request);
+            } catch (RouteNotFoundException $e) {
             }
+        }
 
-            $updatedUri = $request->getUri()->withPath($lowerCasePath);
+        $originalUri = $request->getUri();
+        $path = $originalUri->getPath();
+        $lowerCasePath = mb_strtolower($path);
 
-            $doRedirect = false;
-            $redirectStatusCode = 307;
-            $site = $request->getAttribute('site');
-            if ($site instanceof Site) {
-                $doRedirect = (bool)$site->getConfiguration()['settings']['redirectOnUpperCase'];
-                $redirectStatusCode = (int)($site->getConfiguration()['settings']['redirectStatusCode'] ?? 307);
-            }
+        // nothing has changed, nothing to do
+        if ($lowerCasePath === $path) {
+            return $handler->handle($request);
+        }
 
-            // Redirects only work on GET and HEAD requests
-            if ($doRedirect && in_array($request->getMethod(), ['GET', 'HEAD'])) {
-                return new RedirectResponse($updatedUri, $redirectStatusCode);
-            }
+        $updatedUri = $request->getUri()->withPath($lowerCasePath);
 
-            // Update the path to just work as before, and continue with the process
-            $request = $request->withUri($updatedUri);
-            $routeResult = $request->getAttribute('routing');
-            if ($routeResult instanceof SiteRouteResult) {
-                $routeResult = new SiteRouteResult(
-                    $updatedUri, $routeResult->getSite(), $routeResult->getLanguage(),
-                    mb_strtolower($routeResult->getTail())
-                );
-                $request = $request->withAttribute('routing', $routeResult);
-            }
+        $doRedirect = false;
+        $redirectStatusCode = 307;
+        if ($site instanceof Site) {
+            $doRedirect = (bool)$site->getConfiguration()['settings']['redirectOnUpperCase'];
+            $redirectStatusCode = (int)($site->getConfiguration()['settings']['redirectStatusCode'] ?? 307);
+        }
+
+        // Redirects only work on GET and HEAD requests
+        if ($doRedirect && in_array($request->getMethod(), ['GET', 'HEAD'])) {
+            return new RedirectResponse($updatedUri, $redirectStatusCode);
+        }
+
+        // Update the path to just work as before, and continue with the process
+        $request = $request->withUri($updatedUri);
+        $routeResult = $request->getAttribute('routing');
+
+        if ($routeResult instanceof SiteRouteResult) {
+            $routeResult = new SiteRouteResult(
+                $updatedUri, $routeResult->getSite(), $routeResult->getLanguage(),
+                mb_strtolower($routeResult->getTail())
+            );
+            $request = $request->withAttribute('routing', $routeResult);
         }
 
         return $handler->handle($request);
