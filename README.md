@@ -23,8 +23,18 @@ _justincase_ requires TYPO3 v9.5.0 or later.
 As a web developer, sometimes the team wants a 307 redirect, and sometimes to just work as everything would be lower-case.
 
 _justincase_ does the latter ("just pretend it works") and receives the URL, processes the URL further by default, however
-you can configure the extension on a per-site basis to do redirects instead, by modifying the site configuration yaml
-file and adding these lines at the bottom:
+you can configure the extension on a per-site basis to do redirects instead, by modifying the Languages array of the
+site configuration yaml:
+
+    languages:
+        -
+        title: English
+        ...
+        redirectOnUpperCase: true
+        # in case you want to use a status code, other than 307
+        redirectStatusCode: 303
+
+If you wish to enable redirect for all languages, add these lines at the bottom of the site configuration yaml instead:
 
     settings:
         redirectOnUpperCase: true
