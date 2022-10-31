@@ -60,18 +60,8 @@ class LowerCaseUri implements MiddlewareInterface
         $redirectStatusCode = 307;
         if ($site instanceof Site) {
             $siteLanguage = $request->getAttribute('language')->toArray();
-            $doRedirect = isset($site->getConfiguration()['settings']['redirectOnUpperCase'])
-                ? (bool)$site->getConfiguration()['settings']['redirectOnUpperCase']
-                : (isset($siteLanguage['redirectOnUpperCase'])
-                    ? (bool)$siteLanguage['redirectOnUpperCase']
-                    : false
-                );
-            $redirectStatusCode = isset($site->getConfiguration()['settings']['redirectStatusCode'])
-                ? (int)$site->getConfiguration()['settings']['redirectStatusCode']
-                : (isset($siteLanguage['redirectStatusCode'])
-                    ? (int)$siteLanguage['redirectStatusCode']
-                    : 307
-                );
+            $doRedirect = (bool)($site->getConfiguration()['settings']['redirectOnUpperCase'] ?? $siteLanguage['redirectOnUpperCase'] ?? false);
+            $redirectStatusCode = (int)($site->getConfiguration()['settings']['redirectStatusCode'] ?? $siteLanguage['redirectStatusCode'] ?? 307);
         }
 
         // Redirects only work on GET and HEAD requests
