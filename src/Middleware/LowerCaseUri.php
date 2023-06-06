@@ -60,23 +60,23 @@ class LowerCaseUri implements MiddlewareInterface
         $redirectStatusCode = 307;
         if ($site instanceof Site) {
             $siteLanguage = $request->getAttribute('language')->toArray();
-            $doRedirect = (bool)($site->getConfiguration()['settings']['redirectOnUpperCase'] ?? $siteLanguage['redirectOnUpperCase'] ?? false);
-            $redirectStatusCode = (int)($site->getConfiguration()['settings']['redirectStatusCode'] ?? $siteLanguage['redirectStatusCode'] ?? 307);
+            $doRedirect = (bool) ($site->getConfiguration()['settings']['redirectOnUpperCase'] ?? $siteLanguage['redirectOnUpperCase'] ?? false);
+            $redirectStatusCode = (int) ($site->getConfiguration()['settings']['redirectStatusCode'] ?? $siteLanguage['redirectStatusCode'] ?? 307);
         }
-
         // Redirects only work on GET and HEAD requests
         if ($doRedirect && in_array($request->getMethod(), ['GET', 'HEAD'])) {
             return new RedirectResponse($updatedUri, $redirectStatusCode);
         }
-
         // Update the path to just work as before, and continue with the process
         $request = $request->withUri($updatedUri);
         $routeResult = $request->getAttribute('routing');
 
         if ($routeResult instanceof SiteRouteResult) {
             $routeResult = new SiteRouteResult(
-                $updatedUri, $routeResult->getSite(), $routeResult->getLanguage(),
-                mb_strtolower($routeResult->getTail())
+                $updatedUri,
+                $routeResult->getSite(),
+                $routeResult->getLanguage(),
+                mb_strtolower((string) $routeResult->getTail())
             );
             $request = $request->withAttribute('routing', $routeResult);
         }

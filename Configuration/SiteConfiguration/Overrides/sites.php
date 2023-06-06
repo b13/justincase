@@ -14,10 +14,10 @@ $GLOBALS['SiteConfiguration']['site_language']['columns']['redirectOnUpperCase']
         'items' => [
             [
                 0 => '',
-                1 => ''
-            ]
-        ]
-    ]
+                1 => '',
+            ],
+        ],
+    ],
 ];
 
 $GLOBALS['SiteConfiguration']['site_language']['columns']['redirectStatusCode'] = [
@@ -26,9 +26,9 @@ $GLOBALS['SiteConfiguration']['site_language']['columns']['redirectStatusCode'] 
         'type' => 'input',
         'default' => '307',
         'placeholder' => '307',
-        'size' => 10
+        'size' => 10,
     ],
-    'displayCond' => 'FIELD:redirectOnUpperCase:=:1'
+    'displayCond' => 'FIELD:redirectOnUpperCase:=:1',
 
 ];
 
@@ -37,5 +37,5 @@ $GLOBALS['SiteConfiguration']['site_language']['palettes']['justincase']['showit
 $GLOBALS['SiteConfiguration']['site_language']['types']['1']['showitem'] = str_replace(
     'flag',
     'flag, ,--palette--;;justincase',
-    $GLOBALS['SiteConfiguration']['site_language']['types']['1']['showitem']
+    (string) $GLOBALS['SiteConfiguration']['site_language']['types']['1']['showitem']
 );
