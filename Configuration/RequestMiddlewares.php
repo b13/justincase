@@ -5,10 +5,10 @@ return [
         'b13/just-in-case' => [
             'target' => \B13\JustInCase\Middleware\LowerCaseUri::class,
             'after' => [
-                'typo3/cms-frontend/site-resolver',
+                'typo3/cms-frontend/base-redirect-resolver',
             ],
             'before' => [
-                'typo3/cms-frontend/base-redirect-resolver',
+                'typo3/cms-frontend/page-resolver',
             ],
         ],
     ],
