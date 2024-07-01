@@ -37,5 +37,5 @@ $GLOBALS['SiteConfiguration']['site_language']['palettes']['justincase']['showit
 $GLOBALS['SiteConfiguration']['site_language']['types']['1']['showitem'] = str_replace(
     'flag',
     'flag, ,--palette--;;justincase',
-    (string) $GLOBALS['SiteConfiguration']['site_language']['types']['1']['showitem']
+    (string)$GLOBALS['SiteConfiguration']['site_language']['types']['1']['showitem']
 );

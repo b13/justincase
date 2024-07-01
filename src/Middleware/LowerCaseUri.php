@@ -16,6 +16,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Routing\RouteNotFoundException;
 use TYPO3\CMS\Core\Routing\SiteRouteResult;
@@ -30,8 +31,20 @@ use TYPO3\CMS\Core\Site\Entity\Site;
  */
 class LowerCaseUri implements MiddlewareInterface
 {
+    protected EventDispatcher $eventDispatcher;
+
+    public function __construct(EventDispatcher $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        $beforeMiddlewareIsAppliedEvent = new BeforeMiddlewareIsAppliedEvent($request);
+        $this->eventDispatcher->dispatch($beforeMiddlewareIsAppliedEvent);
+        if ($beforeMiddlewareIsAppliedEvent->shouldBeApplied() === false) {
+            return $handler->handle($request);
+        }
         /** @var Site $site */
         $site = $request->getAttribute('site');
 
@@ -60,8 +73,8 @@ class LowerCaseUri implements MiddlewareInterface
         $redirectStatusCode = 307;
         if ($site instanceof Site) {
             $siteLanguage = $request->getAttribute('language')->toArray();
-            $doRedirect = (bool) ($site->getConfiguration()['settings']['redirectOnUpperCase'] ?? $siteLanguage['redirectOnUpperCase'] ?? false);
-            $redirectStatusCode = (int) ($site->getConfiguration()['settings']['redirectStatusCode'] ?? $siteLanguage['redirectStatusCode'] ?? 307);
+            $doRedirect = (bool)($site->getConfiguration()['settings']['redirectOnUpperCase'] ?? $siteLanguage['redirectOnUpperCase'] ?? false);
+            $redirectStatusCode = (int)($site->getConfiguration()['settings']['redirectStatusCode'] ?? $siteLanguage['redirectStatusCode'] ?? 307);
         }
         // Redirects only work on GET and HEAD requests
         if ($doRedirect && in_array($request->getMethod(), ['GET', 'HEAD'])) {
@@ -76,7 +89,7 @@ class LowerCaseUri implements MiddlewareInterface
                 $updatedUri,
                 $routeResult->getSite(),
                 $routeResult->getLanguage(),
-                mb_strtolower((string) $routeResult->getTail())
+                mb_strtolower((string)$routeResult->getTail())
             );
             $request = $request->withAttribute('routing', $routeResult);
         }

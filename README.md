@@ -43,6 +43,11 @@ If you wish to enable redirect for all languages, add these lines at the bottom 
 
 Please note that this option only works for GET or HEAD requests.
 
+## Events
+
+a ```BeforeMiddlewareIsAppliedEvent``` is fired before LowerCaseUri Middleware is applied.
+you can prevent applying Middleware by calling `event->doNotApply`
+
 ## Caveats
 
 If specific route enhancers check on camel-case (e.g. `{order}/paymentForm/`) this might lead to unexpected behaviours
