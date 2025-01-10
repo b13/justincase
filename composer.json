@@ -1,33 +1,38 @@
 {
-	"name": "b13/justincase",
-	"type": "typo3-cms-extension",
-	"description": "With incoming URLs, it does not matter if they are upper/lowercase, they just work.",
-	"license": "GPL-2.0-or-later",
-	"require": {
-		"php": "^7.2 || ^8.0",
-		"typo3/cms-core": "^9.5 || ^10.0 || ^11.0 || ^12.0"
-	},
-	"replace": {
-		"typo3-ter/justincase": "self.version"
-	},
-	"extra": {
-		"typo3/cms": {
-			"extension-key": "justincase"
-		}
-	},
-	"autoload": {
-		"psr-4": {
-			"B13\\JustInCase\\": "src/"
-		}
-	},
-	"require-dev": {
-		"typo3/coding-standards": "^0.2.0",
-		"typo3/tailor": "^1.1"
-	},
-	"config": {
-		"sort-packages": true
-	},
-	"scripts": {
-		"php:cs": "@composer exec php-cs-fixer fix"
-	}
+  "name": "b13/justincase",
+  "type": "typo3-cms-extension",
+  "description": "With incoming URLs, it does not matter if they are upper/lowercase, they just work.",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "typo3/cms-core": "^11.5 || ^12.4 || ^13.1"
+  },
+  "replace": {
+    "typo3-ter/justincase": "self.version"
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "justincase"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "B13\\JustInCase\\": "src/"
+    }
+  },
+  "require-dev": {
+    "typo3/coding-standards": "^0.5.5",
+    "saschaegerer/phpstan-typo3": "^1.8",
+    "typo3/tailor": "^1.1"
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "typo3/cms-composer-installers": true,
+      "typo3/class-alias-loader": true
+    }
+  },
+  "scripts": {
+    "php:cs": "@composer exec 'php-cs-fixer fix --config=php-cs-fixer.php'",
+    "php:phpstan": "@composer exec 'phpstan analyse -c phpstan.neon'"
+  }
 }
