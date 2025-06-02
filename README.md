@@ -6,8 +6,8 @@ This TYPO3 extension solves your pain - just in case.
 
 ## What does it do?
 
-By default, TYPO3 v9 is strict when you're actual page is called `https://b13.com/lets-connect/` but your marketing
-dudes name it `https://b13.com/Lets-Connect/`. TYPO3 v9 saves URLs as lower-case by default.
+By default, TYPO3 v9 is strict when you're actual page is called `https://b13.com/lets-connect` but your marketing
+dudes name it `https://b13.com/Lets-Connect`. TYPO3 v9 saves URLs as lower-case by default.
 
 A simple PSR-15 based middleware transforms your incoming URL into lower-case and you should be fine, as
 both URLs would work for the users.
