@@ -16,7 +16,9 @@ both URLs would work for the users.
 
 Use it via `composer req b13/justincase` or install the Extension `justincase` from the TYPO3 Extension Repository.
 
-_justincase_ requires TYPO3 v9.5.0 or later.
+_justincase_ requires TYPO3 v13.4 or later (v13.4 and v14 are supported).
+
+For TYPO3 v11.5 and v12.4, use the 2.x release line.
 
 ## Configuration
 
