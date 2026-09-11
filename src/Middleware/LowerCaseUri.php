@@ -45,7 +45,6 @@ class LowerCaseUri implements MiddlewareInterface
         if ($beforeMiddlewareIsAppliedEvent->shouldBeApplied() === false) {
             return $handler->handle($request);
         }
-        /** @var Site $site */
         $site = $request->getAttribute('site');
 
         if ($site instanceof Site) {

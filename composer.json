@@ -4,10 +4,8 @@
   "description": "With incoming URLs, it does not matter if they are upper/lowercase, they just work.",
   "license": "GPL-2.0-or-later",
   "require": {
-    "typo3/cms-backend": "*",
-    "typo3/cms-core": "^14.2",
-    "typo3/cms-fluid": "*",
-    "typo3/cms-frontend": "^14.2"
+    "typo3/cms-core": "^13.4 || ^14.0",
+    "typo3/cms-frontend": "^13.4 || ^14.0"
   },
   "replace": {
     "typo3-ter/justincase": "self.version"
@@ -22,8 +20,14 @@
       "B13\\JustInCase\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "B13\\JustInCase\\Tests\\": "Tests/"
+    }
+  },
   "require-dev": {
-    "saschaegerer/phpstan-typo3": "^3.0.1",
+    "phpunit/phpunit": "^11.5 || ^12.0",
+    "saschaegerer/phpstan-typo3": "^3.0",
     "typo3/coding-standards": "^0.5.5",
     "typo3/tailor": "^1.1"
   },
@@ -36,6 +40,7 @@
   },
   "scripts": {
     "php:cs": "@composer exec 'php-cs-fixer fix --config=php-cs-fixer.php'",
-    "php:phpstan": "@composer exec 'phpstan analyse -c phpstan.neon'"
+    "php:phpstan": "@composer exec 'phpstan analyse -c phpstan.neon'",
+    "php:unit": "@composer exec 'phpunit -c Build/phpunit/UnitTests.xml'"
   }
 }
