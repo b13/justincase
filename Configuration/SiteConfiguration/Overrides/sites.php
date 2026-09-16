@@ -11,12 +11,6 @@ $GLOBALS['SiteConfiguration']['site_language']['columns']['redirectOnUpperCase']
         'type' => 'check',
         'renderType' => 'checkboxToggle',
         'default' => 1,
-        'items' => [
-            [
-                0 => '',
-                1 => '',
-            ],
-        ],
     ],
 ];
 
