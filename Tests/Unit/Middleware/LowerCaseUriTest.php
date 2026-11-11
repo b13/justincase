@@ -129,11 +129,10 @@ final class LowerCaseUriTest extends TestCase
     /**
      * Documents a known limitation rather than desired behaviour.
      *
-     * mb_strtolower() is applied to the still percent-encoded path, so it lowers
-     * the hex digits of an encoded octet instead of the character they represent.
-     * "/%C3%9CBER-UNS" becomes "/%c3%9cber-uns", which decodes back to "/Uber-uns"
-     * with a still-uppercase umlaut. Pure ASCII paths are unaffected, which is why
-     * this has gone unnoticed.
+     * Lowering works on the still percent-encoded path. Encoded octets are kept
+     * as they are, so the character they represent is not lowered:
+     * "/%C3%9CBER-UNS" becomes "/%C3%9Cber-uns", which decodes back to "/Über-uns"
+     * with a still-uppercase umlaut. Pure ASCII paths are unaffected.
      */
     #[Test]
     public function encodedNonAsciiCharactersAreNotActuallyLowered(): void
@@ -143,11 +142,114 @@ final class LowerCaseUriTest extends TestCase
         $this->subject()->process($request, $this->handler());
 
         $loweredPath = $this->handledRequest->getUri()->getPath();
-        self::assertSame('/%c3%9cber-uns', $loweredPath);
+        self::assertSame('/%C3%9Cber-uns', $loweredPath);
         // The ASCII part is lowered correctly ...
         self::assertStringContainsString('ber-uns', $loweredPath);
         // ... but the umlaut is still uppercase once decoded.
         self::assertSame("/\u{00DC}ber-uns", rawurldecode($loweredPath));
+    }
+
+    /**
+     * @return array<string, array{0: string}>
+     */
+    public static function pathsDifferingOnlyInOctetCaseDataProvider(): array
+    {
+        return [
+            'uppercase octets' => ['/cn/hzc/%E5%AD%A6%E7%94%9F%E4%BA%A4%E6%B5%81/xs'],
+            'lowercase octets' => ['/cn/hzc/%e5%ad%a6%e7%94%9f%e4%ba%a4%e6%b5%81/xs'],
+            'mixed case octets' => ['/en/nonexistent-%C3%a4'],
+        ];
+    }
+
+    /**
+     * "%E5" and "%e5" are the same URI (RFC 3986, section 2.1): no redirect.
+     */
+    #[Test]
+    #[DataProvider('pathsDifferingOnlyInOctetCaseDataProvider')]
+    public function percentEncodedOctetsAreNotLowered(string $path): void
+    {
+        $site = new RoutableSite('main', 1, [
+            'base' => 'https://example.com/',
+            'settings' => ['redirectOnUpperCase' => true],
+        ]);
+        $request = (new ServerRequest('https://example.com' . $path))
+            ->withAttribute('site', $site)
+            ->withAttribute('language', $this->siteLanguage());
+
+        $response = $this->subject()->process($request, $this->handler());
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame($request, $this->handledRequest);
+    }
+
+    #[Test]
+    public function redirectKeepsPercentEncodedOctets(): void
+    {
+        $site = new RoutableSite('main', 1, [
+            'base' => 'https://example.com/',
+            'settings' => ['redirectOnUpperCase' => true],
+        ]);
+        $request = (new ServerRequest('https://example.com/Ueber-%C3%A4'))
+            ->withAttribute('site', $site)
+            ->withAttribute('language', $this->siteLanguage());
+
+        $response = $this->subject()->process($request, $this->handler());
+
+        self::assertSame(307, $response->getStatusCode());
+        self::assertSame('https://example.com/ueber-%C3%A4', $response->getHeaderLine('location'));
+    }
+
+    /**
+     * A proxy in front of TYPO3 may normalize octets to uppercase (RFC 3986,
+     * section 6.2.2.1). Following the redirect must then not redirect again.
+     */
+    #[Test]
+    public function followingRedirectThroughNormalizingProxyDoesNotLoop(): void
+    {
+        $site = new RoutableSite('main', 1, [
+            'base' => 'https://example.com/',
+            'settings' => ['redirectOnUpperCase' => true],
+        ]);
+        $normalizingProxy = static fn (string $uri): string => (string)preg_replace_callback(
+            '/%[0-9a-f]{2}/i',
+            static fn (array $matches): string => strtoupper($matches[0]),
+            $uri
+        );
+        $request = (new ServerRequest($normalizingProxy('https://example.com/Foo-%c3%a4')))
+            ->withAttribute('site', $site)
+            ->withAttribute('language', $this->siteLanguage());
+
+        $response = $this->subject()->process($request, $this->handler());
+        self::assertSame(307, $response->getStatusCode());
+
+        $followUpRequest = (new ServerRequest($normalizingProxy($response->getHeaderLine('location'))))
+            ->withAttribute('site', $site)
+            ->withAttribute('language', $this->siteLanguage());
+        $followUpResponse = $this->subject()->process($followUpRequest, $this->handler());
+
+        self::assertSame(200, $followUpResponse->getStatusCode());
+        self::assertSame($followUpRequest, $this->handledRequest);
+    }
+
+    #[Test]
+    public function routingTailKeepsPercentEncodedOctets(): void
+    {
+        $site = new RoutableSite('main', 1, ['base' => 'https://example.com/']);
+        $language = $this->siteLanguage();
+        $uri = new \TYPO3\CMS\Core\Http\Uri('https://example.com/Foo/%C3%A4Bar');
+        $routeResult = new SiteRouteResult($uri, $site, $language, 'Foo/%C3%A4Bar');
+
+        $request = (new ServerRequest($uri))
+            ->withAttribute('site', $site)
+            ->withAttribute('language', $language)
+            ->withAttribute('routing', $routeResult);
+
+        $this->subject()->process($request, $this->handler());
+
+        $result = $this->handledRequest->getAttribute('routing');
+        self::assertInstanceOf(SiteRouteResult::class, $result);
+        self::assertSame('/foo/%C3%A4bar', $result->getUri()->getPath());
+        self::assertSame('foo/%C3%A4bar', $result->getTail());
     }
 
     #[Test]

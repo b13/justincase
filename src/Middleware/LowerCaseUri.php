@@ -59,7 +59,7 @@ class LowerCaseUri implements MiddlewareInterface
 
         $originalUri = $request->getUri();
         $path = $originalUri->getPath();
-        $lowerCasePath = mb_strtolower($path);
+        $lowerCasePath = $this->lowerCasePath($path);
 
         // nothing has changed, nothing to do
         if ($lowerCasePath === $path) {
@@ -88,11 +88,28 @@ class LowerCaseUri implements MiddlewareInterface
                 $updatedUri,
                 $routeResult->getSite(),
                 $routeResult->getLanguage(),
-                mb_strtolower((string)$routeResult->getTail())
+                $this->lowerCasePath((string)$routeResult->getTail())
             );
             $request = $request->withAttribute('routing', $routeResult);
         }
 
         return $handler->handle($request);
+    }
+
+    /**
+     * Lowers the path but leaves percent-encoded octets ("%E5") untouched.
+     *
+     * The hex digits of an octet are case-insensitive (RFC 3986, section 2.1), so
+     * "%E5" and "%e5" denote the same URI. Lowering them would only trigger a
+     * pointless redirect, or an endless one when a proxy in front of TYPO3
+     * normalizes octets back to uppercase (RFC 3986, section 6.2.2.1).
+     */
+    protected function lowerCasePath(string $path): string
+    {
+        return preg_replace_callback(
+            '/(%[0-9A-Fa-f]{2})|[^%]+/',
+            static fn (array $matches): string => ($matches[1] ?? '') !== '' ? $matches[1] : mb_strtolower($matches[0]),
+            $path
+        ) ?? mb_strtolower($path);
     }
 }
